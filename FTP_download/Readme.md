@@ -1,4 +1,4 @@
-# FTP upload
+# FTP download
 ## Environment
 - Python version: 3.6-3.8
 - Python lib：ftplib
