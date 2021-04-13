@@ -132,10 +132,10 @@ if __name__ == '__main__':
     ip = "10.20.30.40"      # 目标IP地址
     Username = "username"      # 用户名
     Password = "password"      # 密码
-    FTP = ftp_connect(ip, Port, Username, Password)  # 连接FTP
+    FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP，获取FTP对象
     # FTP.encoding = "gbk"        # 传输中文需要更改编码
-    local_upload_dir = "D://TestFTP//upload"      # 上传目录
+    local_upload_dir = ".//upload"      # 上传目录，选定在项目的upload目录下，该路径必须存在
     remote = strftime("%Y%m%d")     # 远端目录名字以日期命名
-    if FTP != "":       # 连接成功
-        ftp_upload(FTP, local_upload_dir, remote)       # 测试FTP连接时只需注释掉ftp_upload()方法
-        FTP.close()     # 结束FTP服务
+    if FObj != "":       # 连接成功
+        ftp_upload(FObj, local_upload_dir, remote)       # 测试FTP连接时只需注释掉ftp_upload()方法
+        FObj.close()     # 结束FTP服务
