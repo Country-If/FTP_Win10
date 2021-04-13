@@ -133,7 +133,7 @@ if __name__ == '__main__':
     Username = "username"      # 用户名
     Password = "password"      # 密码
     FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP，获取FTP对象
-    # FTP.encoding = "gbk"        # 传输中文需要更改编码
+    # FObj.encoding = "gbk"        # 传输中文需要更改编码
     local_upload_dir = ".//upload"      # 上传目录，选定在项目的upload目录下，该路径必须存在
     remote = strftime("%Y%m%d")     # 远端目录名字以日期命名
     if FObj != "":       # 连接成功
