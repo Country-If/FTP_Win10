@@ -79,7 +79,7 @@ def upload_file(ftp, local_file, remote_file):
     if is_same_size(ftp, local_file, remote_file):
         print('上传 %s' % local_file + " 成功!")
     else:
-        upload_dir(ftp, local_file, remote_file)
+        upload_file(ftp, local_file, remote_file)
 
 
 # 上传整个目录下的文件
