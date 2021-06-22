@@ -43,12 +43,14 @@ def is_same_size(ftp, local_file, remote_file):
     # 获取远程文件的大小
     try:
         remote_file_size = ftp.size(remote_file)
+        print("remote_file_size: " + str(remote_file_size))
     except Exception as e:
         print("%s" % e)
         remote_file_size = -1
     # 获取本地文件的大小
     try:
         local_file_size = os.path.getsize(local_file)
+        print("local_file_size: " + str(local_file_size))
     except Exception as e:
         print("%s" % e)
         local_file_size = -2
@@ -78,6 +80,7 @@ def download_file(ftp, local_file, remote_file):
     # 判断本地文件是否存在
     if not os.path.exists(local_file):
         with open(local_file, 'wb') as f:
+            print("正在下载：" + remote_file)
             ftp.retrbinary('RETR %s' % remote_file, f.write, buf_size)
         # 判断文件大小是否相等，不相等则重新下载
         if is_same_size(ftp, local_file, remote_file):
@@ -101,7 +104,7 @@ def download_dir(ftp, remote_path):
     """
     # 如果目录不存在则创建目录
     if not os.path.exists(remote_path):
-        os.mkdir(remote_path)
+        os.makedirs(remote_path)    # 可能是多级目录，需要用到makedirs
     os.chdir(remote_path)  # 切换到下载目录
     try:
         ftp.cwd(remote_path)  # 切换到远程目录
@@ -117,7 +120,7 @@ def download_dir(ftp, remote_path):
             download_dir(ftp, file_name)        # 递归下载目录
             # 下载后切换到上一级目录
             ftp.cwd("..")
-            os.chdir("../..")
+            os.chdir("..")
         except Exception:       # 是文件，直接下载
             download_file(ftp, file_name, file_name)
 
@@ -136,13 +139,13 @@ def ftp_download(ftp, local_dir, remote_dir):
 
 if __name__ == '__main__':
     Port = 21  # 端口号默认为21
-    ip = "10.20.30.40"      # 目标IP地址
-    Username = "username"      # 用户名
-    Password = "password"      # 密码
+    ip = "10.20.30.40"  # 目标IP地址
+    Username = "username"  # 用户名
+    Password = "password"  # 密码
     FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP
     # FObj.encoding = "gbk"        # 传输中文需要更改编码
-    local_download_dir = ".//download"      # 下载目录，默认在项目的download目录下，目录会自动创建
-    remote = strftime("%Y%m%d")     # 远端目录名字以日期命名
-    if FObj != "":       # 连接成功
-        ftp_download(FObj, local_download_dir, remote)       # 测试FTP连接时只需注释掉ftp_download()方法
-        FObj.close()     # 结束FTP服务
+    local_download_dir = ".//download"  # 下载目录，默认在项目的download目录下，目录会自动创建
+    remote = strftime("%Y%m%d")  # 远端目录名字以日期命名
+    if FObj != "":  # 连接成功
+        ftp_download(FObj, local_download_dir, remote)  # 测试FTP连接时只需注释掉ftp_download()方法
+        FObj.close()  # 结束FTP服务
