@@ -92,7 +92,15 @@ def download_file(ftp, local_file, remote_file):
         # 如果本地文件已存在，但是不完整，则重新下载
         if not is_same_size(ftp, local_file, remote_file):
             print("大小不同，文件重新下载...")
-            download_file(ftp, local_file, remote_file)
+            with open(local_file, 'wb') as f:
+                print("正在下载：" + remote_file)
+                ftp.retrbinary('RETR %s' % remote_file, f.write, buf_size)
+            # 判断文件大小是否相等，不相等则重新下载
+            if is_same_size(ftp, local_file, remote_file):
+                print("%s 下载成功" % remote_file)
+            else:
+                print("大小不同，文件重新下载...")
+                download_file(ftp, local_file, remote_file)
         else:
             print("%s 已存在" % remote_file)
 
