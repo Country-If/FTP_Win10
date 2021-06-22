@@ -113,7 +113,7 @@ def download_dir(ftp, local_dir, remote_path):
         local_dir：本地路径
         remote_path：远程目录
     """
-    local_dir = local_dir + '//' + remote_path
+    local_dir = local_dir + '/' + remote_path
     # 如果目录不存在则创建目录
     if not os.path.exists(local_dir):
         os.makedirs(local_dir)    # 可能是多级目录，需要用到makedirs
@@ -160,7 +160,7 @@ if __name__ == '__main__':
     Password = "password"  # 密码
     FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP
     # FObj.encoding = "gbk"        # 传输中文需要更改编码
-    local_download_dir = ".//download"  # 下载目录，默认在项目的download目录下，目录会自动创建
+    local_download_dir = "./download"  # 下载目录，默认在项目的download目录下，目录会自动创建
     remote = strftime("%Y%m%d")  # 远端目录名字以日期命名
     if FObj != "":  # 连接成功
         ftp_download(FObj, local_download_dir, remote)  # 测试FTP连接时只需注释掉ftp_download()方法
