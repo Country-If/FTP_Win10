@@ -86,30 +86,36 @@ def download_file(ftp, local_file, remote_file):
         if is_same_size(ftp, local_file, remote_file):
             print("%s 下载成功" % remote_file)
         else:
+            print("大小不同，文件重新下载...")
             download_file(ftp, local_file, remote_file)
     else:
         # 如果本地文件已存在，但是不完整，则重新下载
         if not is_same_size(ftp, local_file, remote_file):
+            print("大小不同，文件重新下载...")
             download_file(ftp, local_file, remote_file)
         else:
             print("%s 已存在" % remote_file)
 
 
 # 下载整个目录下的文件
-def download_dir(ftp, remote_path):
+def download_dir(ftp, local_dir, remote_path):
     """
     参数：
         ftp：FTP()创建的对象
+        local_dir：本地路径
         remote_path：远程目录
     """
+    local_dir = local_dir + '//' + remote_path
     # 如果目录不存在则创建目录
-    if not os.path.exists(remote_path):
-        os.makedirs(remote_path)    # 可能是多级目录，需要用到makedirs
-    os.chdir(remote_path)  # 切换到下载目录
+    if not os.path.exists(local_dir):
+        os.makedirs(local_dir)    # 可能是多级目录，需要用到makedirs
+    os.chdir(local_dir)  # 切换到下载目录
     try:
         ftp.cwd(remote_path)  # 切换到远程目录
     except Exception:
         print("%s 不存在" % remote_path)
+    print("当前ftp路径：" + str(ftp.pwd()))
+    print("当前下载路径：" + str(os.getcwd()))
     file_list = ftp.nlst()      # 获取下载文件列表
     print("准备下载的文件列表：" + str(file_list))
     for file_name in file_list:
@@ -117,7 +123,7 @@ def download_dir(ftp, remote_path):
         try:        # 是目录，递归下载目录
             ftp.cwd(file_name)      # 判断是否为目录，若是目录则切换到目录下，否则出现异常
             ftp.cwd("..")       # 切换进目录后需要返回上一级
-            download_dir(ftp, file_name)        # 递归下载目录
+            download_dir(ftp, local_dir, file_name)        # 递归下载目录
             # 下载后切换到上一级目录
             ftp.cwd("..")
             os.chdir("..")
@@ -130,11 +136,13 @@ def ftp_download(ftp, local_dir, remote_dir):
     """
     参数：
         ftp：FTP()创建的对象
+        local_dir：本地目录
+        remote_dir：远程目录
     """
     if not os.path.exists(local_dir):      # 若下载路径不存在则创建目录
-        os.mkdir(local_dir)
+        os.makedirs(local_dir)
     os.chdir(local_dir)        # 切换到下载目录
-    download_dir(ftp, remote_dir)       # 下载目录下的文件
+    download_dir(ftp, str(os.getcwd()), remote_dir)       # 下载目录下的文件
 
 
 if __name__ == '__main__':
