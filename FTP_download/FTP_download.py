@@ -158,10 +158,10 @@ if __name__ == '__main__':
     ip = "10.20.30.40"  # 目标IP地址
     Username = "username"  # 用户名
     Password = "password"  # 密码
-    FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP
-    # FObj.encoding = "gbk"        # 传输中文需要更改编码
     local_download_dir = "./download"  # 下载目录，默认在项目的download目录下，目录会自动创建
     remote = strftime("%Y%m%d")  # 远端目录名字以日期命名
+    FObj = ftp_connect(ip, Port, Username, Password)  # 连接FTP
+    # FObj.encoding = "gbk"        # 传输中文需要更改编码
     if FObj != "":  # 连接成功
         ftp_download(FObj, local_download_dir, remote)  # 测试FTP连接时只需注释掉ftp_download()方法
         FObj.close()  # 结束FTP服务
